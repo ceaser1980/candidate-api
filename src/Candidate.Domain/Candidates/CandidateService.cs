@@ -14,11 +14,12 @@ namespace Candidate.Domain.Candidates
     {
         private readonly ICandidateDataService _candidateDataService;
         private readonly ILogger _logger;
-        
+
         /// <summary>
         /// Constructor for candidate service
         /// </summary>
         /// <param name="candidateDataService">Data service for storing and retrieving candidates</param>
+        /// <param name="logger">Injection of logging service</param>
         public CandidateService(ICandidateDataService candidateDataService, ILogger<CandidateService> logger)
         {
             _candidateDataService = candidateDataService ?? throw new ArgumentNullException(nameof(candidateDataService));

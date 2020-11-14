@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OneOf.Types;
+using OneOf;
 
 namespace Candidate.Domain.Candidates
 {
@@ -14,12 +16,12 @@ namespace Candidate.Domain.Candidates
             _candidateDatabaseService = candidateDatabaseService ?? throw new ArgumentNullException(nameof(candidateDatabaseService));
         }
         
-        public async Task<Candidate> RetrieveCandidatesWithSkills(List<string> skills)
+        public async Task<OneOf<Candidate, NotFound>> RetrieveCandidatesWithSkills(List<string> skills)
         {
             var candidate = await _candidateDatabaseService.RetrieveAsync(skills);
 
             if (!candidate.Any())
-                return null;
+                return new NotFound();
             
             return candidate
                 .Select(x => new Candidate
@@ -36,15 +38,11 @@ namespace Candidate.Domain.Candidates
 
         public async Task StoreCandidate(Candidate candidate)
         {
-            var skillDto = candidate.Skills
-                .Select(skill => new SkillDto {Id = Guid.NewGuid(), Skill = skill})
-                .ToList();
-
             await _candidateDatabaseService.StoreAsync(new CandidateDto
             {
                 Id = Guid.NewGuid(),
                 Name = candidate.Name,
-                Skills = skillDto
+                Skills = candidate.Skills.Select(skill => new SkillDto(skill)).ToList()
             });
         }
     }

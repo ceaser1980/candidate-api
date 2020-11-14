@@ -24,10 +24,9 @@ namespace Candidate.Api.Controllers
 
             var candidate = await _candidateService.RetrieveCandidatesWithSkills(splitSkills);
 
-            if (candidate is null)
-                return NotFound();
-            
-            return Ok(candidate);
+            return candidate.Match<IActionResult>(
+                Ok, 
+                notFound => NotFound());
         }
 
         [HttpPost]

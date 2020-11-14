@@ -25,16 +25,18 @@ namespace Candidate.Domain.Candidates
                     .Include(x => x.Skills)
                     .ToListAsync();
 
-                return candidates.Select(x => new
-                    CandidateDto
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Skills = x.Skills
-                            .Where(z => skills.Contains(z.Skill.ToLowerInvariant()))
-                            .Where(z => z.Skill.Length > 0)
-                            .ToList()
-                    }).ToList();
+                return candidates
+                    .Select(x => new
+                        CandidateDto
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Skills = x.Skills
+                                .Where(z => skills.Contains(z.Skill.ToLowerInvariant()))
+                                .ToList()
+                        })
+                    .Where(item => item.Skills.Count > 0)
+                    .ToList();
             }
         }
         

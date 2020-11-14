@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Candidate.Domain.Database;
@@ -8,20 +9,18 @@ namespace Candidate.Domain.Candidates
 {
     public class CandidateDatabaseService : ICandidateDatabaseService
     {
-        private readonly DbContextOptions<CandidateContext> _candidateDbContextOptions;
+        private readonly CandidateContext _context;
         
-        public CandidateDatabaseService()
+        public CandidateDatabaseService(CandidateContext context)
         {
-            _candidateDbContextOptions = new DbContextOptionsBuilder<CandidateContext>()
-                .UseInMemoryDatabase(databaseName: "Candidates")
-                .Options;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<CandidateDto>> RetrieveAsync(List<string> skills)
         {
-            await using (var context = new CandidateContext(_candidateDbContextOptions))
+            await using (_context)
             {
-                var candidates = await context.Candidates
+                var candidates = await _context.Candidates
                     .Include(x => x.Skills)
                     .ToListAsync();
 
@@ -39,13 +38,13 @@ namespace Candidate.Domain.Candidates
                     .ToList();
             }
         }
-        
+
         public async Task StoreAsync(CandidateDto candidate)
         {
-            await using (var context = new CandidateContext(_candidateDbContextOptions))
+            await using (_context)
             {
-                await context.Candidates.AddAsync(candidate);
-                await context.SaveChangesAsync();
+                await _context.Candidates.AddAsync(candidate);
+                await _context.SaveChangesAsync();
             }
         }
     }

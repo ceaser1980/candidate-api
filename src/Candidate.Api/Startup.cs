@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Candidate.Api.Middleware;
 using Candidate.Domain.Candidates;
 using Candidate.Domain.Database;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,8 @@ namespace Candidate.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<RequestLoggingMiddleware>();
+            
             app.UseSwagger();
             
             if (env.IsDevelopment())
@@ -51,8 +54,6 @@ namespace Candidate.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Candidate API V1");
             });
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 

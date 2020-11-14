@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Domain", "src\Can
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Api", "src\Candidate.Api\Candidate.Api.csproj", "{5F2A5DD8-0C04-4631-BF8D-C67C43EF93B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Api.Tests", "test\Candidate.Api.Tests\Candidate.Api.Tests.csproj", "{8F681576-74AB-46A4-A216-75B3CFBFF378}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Tests", "test\Candidate.Tests\Candidate.Tests.csproj", "{8F681576-74AB-46A4-A216-75B3CFBFF378}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

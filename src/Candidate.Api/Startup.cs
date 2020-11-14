@@ -20,7 +20,7 @@ namespace Candidate.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ICandidateDatabaseService, CandidateDatabaseService>();
+            services.AddScoped<ICandidateDataService, CandidateDataService>();
             services.AddScoped<ICandidateService, CandidateService>();
 
             services.AddDbContext<CandidateContext>(options => options.UseInMemoryDatabase("Candidates"));

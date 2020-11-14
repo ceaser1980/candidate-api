@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Candidate.Api
+namespace Candidate.Domain.Candidates
 {
     /// <summary>
     /// Class representing a job candidate

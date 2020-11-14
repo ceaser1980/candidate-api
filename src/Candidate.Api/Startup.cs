@@ -27,6 +27,7 @@ namespace Candidate.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ICandidateDatabaseService, CandidateDatabaseService>();
+            services.AddSingleton<ICandidateService, CandidateService>();
             
             services.AddControllers();
         }

@@ -32,6 +32,7 @@ namespace Candidate.Domain.Candidates
                         Name = x.Name,
                         Skills = x.Skills
                             .Where(z => skills.Contains(z.Skill.ToLowerInvariant()))
+                            .Where(z => z.Skill.Length > 0)
                             .ToList()
                     }).ToList();
             }

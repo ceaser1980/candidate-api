@@ -10,39 +10,32 @@ namespace Candidate.Api.Controllers
     [Route("[controller]")]
     public class CandidatesController : Controller
     {
-        private readonly ICandidateDatabaseService _candidateDatabaseService;
+        private readonly ICandidateService _candidateService;
         
-        public CandidatesController(ICandidateDatabaseService databaseService)
+        public CandidatesController(ICandidateDatabaseService databaseService, ICandidateService candidateService)
         {
-            _candidateDatabaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+            _candidateService = candidateService ?? throw new ArgumentNullException(nameof(candidateService));
         }
         
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] string skills)
         {
-            var splitSkills = skills.Split(",");
+            var splitSkills = skills.Split(",").ToList();
 
-            var candidates = await _candidateDatabaseService.RetrieveAsync(splitSkills.ToList());
+            var candidate = await _candidateService.RetrieveCandidatesWithSkills(splitSkills);
 
-            return Ok(candidates.FirstOrDefault());
+            if (candidate is null)
+                return NotFound();
+            
+            return Ok(candidate);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]Candidate candidate)
+        public async Task<IActionResult> PostAsync([FromBody]Domain.Candidates.Candidate candidate)
         {
-            var skillDto = candidate.Skills
-                .Select(skill => new SkillDto {Id = Guid.NewGuid(), Skill = skill})
-                .ToList();
-
-            var testCandidate = new CandidateDto
-            {
-                Id = Guid.NewGuid(),
-                Name = candidate.Name,
-                Skills = skillDto
-            };
+            await _candidateService.StoreCandidate(candidate);
             
-            await _candidateDatabaseService.StoreAsync(testCandidate);
-            return Ok(candidate);
+            return Ok();
         }
     }
 }

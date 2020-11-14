@@ -6,7 +6,7 @@ namespace Candidate.Domain.Candidates
 {
     public interface ICandidateDataService
     {
-        Task<List<CandidateDto>> RetrieveAsync(List<string> skills, CancellationToken cancellationToken);
+        Task<List<CandidateDto>> RetrieveAsync(CancellationToken cancellationToken);
         Task StoreAsync(CandidateDto candidate, CancellationToken cancellationToken);
     }
 }

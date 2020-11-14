@@ -46,7 +46,7 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
 
             //act
@@ -85,7 +85,7 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
             
             //act
@@ -126,7 +126,7 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
             
             //act

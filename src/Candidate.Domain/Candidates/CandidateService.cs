@@ -19,22 +19,12 @@ namespace Candidate.Domain.Candidates
         
         public async Task<OneOf<Candidate, NotFound>> RetrieveCandidatesWithSkills(List<string> skills, CancellationToken cancellationToken)
         {
-            var candidate = await _candidateDataService.RetrieveAsync(skills, cancellationToken);
+            var candidates = await _candidateDataService.RetrieveAsync(cancellationToken);
 
-            if (!candidate.Any())
+            if (!candidates.Any())
                 return new NotFound();
 
-            return candidate
-                .Select(x => new Candidate
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Skills = x.Skills
-                        .Select(y => y.Skill)
-                        .ToArray()
-                })
-                .OrderByDescending(x => x.Skills.Length)
-                .FirstOrDefault();
+            return MatchCandidateSkills(skills, candidates).FirstOrDefault();
         }
 
         public async Task StoreCandidate(Candidate candidate, CancellationToken cancellationToken)
@@ -45,6 +35,35 @@ namespace Candidate.Domain.Candidates
                 Name = candidate.Name,
                 Skills = candidate.Skills.Select(skill => new SkillDto(skill)).ToList()
             }, cancellationToken);
+        }
+        
+        private static IEnumerable<Candidate> MatchCandidateSkills(List<string> skills, IEnumerable<CandidateDto> candidates)
+        {
+            var matchedCandidates = new List<Candidate>();
+                
+            foreach (var candidate in candidates)
+            {
+                var candidateSkills = candidate.Skills
+                    .Select(x => x.Skill)
+                    .ToArray();
+
+                var matchedCounter = 
+                    candidateSkills
+                        .Select(skill => skills.Find(x => x == skill))
+                        .Count(result => result != null);
+
+                if (matchedCounter > 0)
+                {
+                    matchedCandidates.Add(new Candidate
+                    {
+                        Id = candidate.Id,
+                        Name = candidate.Name,
+                        Skills = candidateSkills
+                    });
+                }
+            }
+
+            return matchedCandidates;
         }
     }
 }

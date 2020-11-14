@@ -7,15 +7,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Candidate.Domain.Candidates
 {
+    ///<inheritdoc/>
     public class CandidateDataService : ICandidateDataService
     {
         private readonly CandidateContext _context;
         
+        /// <summary>
+        /// Constructor for candidate data service
+        /// </summary>
+        /// <param name="context">Candidate context for communicating with data store</param>
         public CandidateDataService(CandidateContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        ///<inheritdoc/>
         public async Task<List<CandidateDto>> RetrieveAsync(CancellationToken cancellationToken)
         {
             await using (_context)
@@ -26,6 +32,7 @@ namespace Candidate.Domain.Candidates
             }
         }
 
+        ///<inheritdoc/>
         public async Task StoreAsync(CandidateDto candidate, CancellationToken cancellationToken)
         {
             await using (_context)

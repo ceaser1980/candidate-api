@@ -8,16 +8,22 @@ using OneOf;
 
 namespace Candidate.Domain.Candidates
 {
+    ///<inheritdoc/>
     public class CandidateService : ICandidateService
     {
         private readonly ICandidateDataService _candidateDataService;
         
+        /// <summary>
+        /// Constructor for candidate service
+        /// </summary>
+        /// <param name="candidateDataService">Data service for storing and retrieving candidates</param>
         public CandidateService(ICandidateDataService candidateDataService)
         {
             _candidateDataService = candidateDataService ?? throw new ArgumentNullException(nameof(candidateDataService));
         }
         
-        public async Task<OneOf<Candidate, NotFound>> RetrieveCandidatesWithSkills(List<string> skills, CancellationToken cancellationToken)
+        ///<inheritdoc/>
+        public async Task<OneOf<Candidate, NotFound>> RetrieveCandidateWithSkills(List<string> skills, CancellationToken cancellationToken)
         {
             var candidates = await _candidateDataService.RetrieveAsync(cancellationToken);
 
@@ -27,6 +33,7 @@ namespace Candidate.Domain.Candidates
             return MatchCandidateSkills(skills, candidates).FirstOrDefault();
         }
 
+        ///<inheritdoc/>
         public async Task StoreCandidate(Candidate candidate, CancellationToken cancellationToken)
         {
             await _candidateDataService.StoreAsync(new CandidateDto

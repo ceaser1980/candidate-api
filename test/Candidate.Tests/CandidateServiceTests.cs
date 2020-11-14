@@ -50,7 +50,7 @@ namespace Candidate.Tests
                 .ReturnsAsync(candidates);
 
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);
@@ -89,7 +89,7 @@ namespace Candidate.Tests
                 .ReturnsAsync(candidates);
             
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);
@@ -130,7 +130,7 @@ namespace Candidate.Tests
                 .ReturnsAsync(candidates);
             
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);

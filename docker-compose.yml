@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+    candidate.webapi:
+        image: candidate.webapi
+        container_name: candidate.webapi
+        build:
+          context: .
+          dockerfile: ./src/Candidate.Api/dockerfile
+        environment:
+          - ASPNETCORE_URLS=http://+:5000;http://+:80
+        ports:
+          - "5000:5000"
+        networks:
+          - candidate-network
+
+networks:
+    candidate-network:
+        name: candidate-network

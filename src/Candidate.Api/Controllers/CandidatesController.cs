@@ -8,7 +8,7 @@ namespace Candidate.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CandidatesController : Controller
+    public class CandidatesController : ControllerBase
     {
         private readonly ICandidateService _candidateService;
         
@@ -20,6 +20,9 @@ namespace Candidate.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] string skills)
         {
+            if (skills is null || skills.Length <= 0)
+                return BadRequest();
+            
             var splitSkills = skills.Split(",").ToList();
 
             var candidate = await _candidateService.RetrieveCandidatesWithSkills(splitSkills);
@@ -32,6 +35,9 @@ namespace Candidate.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody]Domain.Candidates.Candidate candidate)
         {
+            if (candidate is null || candidate.Id == Guid.Empty)
+                return BadRequest();
+            
             await _candidateService.StoreCandidate(candidate);
             
             return Ok();

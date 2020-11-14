@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9FF45D3F-DDD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2D01FF97-3660-4A3F-8A15-30257E6C0C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate", "src\Candidate\Candidate.csproj", "{F1ABA3E0-773B-4949-91AF-2CCE279C6373}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Domain", "src\Candidate.Domain\Candidate.Domain.csproj", "{F1ABA3E0-773B-4949-91AF-2CCE279C6373}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Candidate.Api", "src\Candidate.Api\Candidate.Api.csproj", "{5F2A5DD8-0C04-4631-BF8D-C67C43EF93B0}"
 EndProject

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Candidate.Domain.Candidates;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -13,12 +14,14 @@ namespace Candidate.Tests
     {
         private ICandidateService _candidateService;
         private ICandidateDataService _candidateDataService;
+        private ILogger<CandidateService> _logger;
 
         [SetUp]
         public void Setup()
         {
             _candidateDataService = Mock.Of<ICandidateDataService>();
-            _candidateService = new CandidateService(_candidateDataService);
+            _logger = Mock.Of<ILogger<CandidateService>>();
+            _candidateService = new CandidateService(_candidateDataService, _logger);
         }
 
         [Test]

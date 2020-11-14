@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using OneOf.Types;
 using OneOf;
 
@@ -12,14 +13,16 @@ namespace Candidate.Domain.Candidates
     public class CandidateService : ICandidateService
     {
         private readonly ICandidateDataService _candidateDataService;
+        private readonly ILogger _logger;
         
         /// <summary>
         /// Constructor for candidate service
         /// </summary>
         /// <param name="candidateDataService">Data service for storing and retrieving candidates</param>
-        public CandidateService(ICandidateDataService candidateDataService)
+        public CandidateService(ICandidateDataService candidateDataService, ILogger<CandidateService> logger)
         {
             _candidateDataService = candidateDataService ?? throw new ArgumentNullException(nameof(candidateDataService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
         ///<inheritdoc/>
@@ -28,20 +31,40 @@ namespace Candidate.Domain.Candidates
             var candidates = await _candidateDataService.RetrieveAsync(cancellationToken);
 
             if (!candidates.Any())
+            {
+                _logger.LogInformation("Unable to find any candidates in the data store");
                 return new NotFound();
+            }
 
-            return MatchCandidateSkills(skills, candidates).FirstOrDefault();
+            var results = MatchCandidateSkills(skills, candidates).ToList();
+
+            if (!results.Any())
+            {
+                _logger.LogInformation("Unable to find any candidates that match the skills provided");
+                return new NotFound();
+            }
+            
+            return results.FirstOrDefault();
         }
 
         ///<inheritdoc/>
         public async Task StoreCandidate(Candidate candidate, CancellationToken cancellationToken)
         {
-            await _candidateDataService.StoreAsync(new CandidateDto
+            try
             {
-                Id = Guid.NewGuid(),
-                Name = candidate.Name,
-                Skills = candidate.Skills.Select(skill => new SkillDto(skill)).ToList()
-            }, cancellationToken);
+                await _candidateDataService.StoreAsync(new CandidateDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = candidate.Name,
+                    Skills = candidate.Skills.Select(skill => new SkillDto(skill)).ToList()
+                }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex, "Error storing candidate with id {Id} in the data store", candidate.Id);
+                throw;
+            }
         }
         
         private static IEnumerable<Candidate> MatchCandidateSkills(List<string> skills, IEnumerable<CandidateDto> candidates)

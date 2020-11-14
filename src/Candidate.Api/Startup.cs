@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Reflection;
+using Candidate.Api.Middleware;
 using Candidate.Domain.Candidates;
 using Candidate.Domain.Database;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +24,14 @@ namespace Candidate.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+            
             services.AddScoped<ICandidateDataService, CandidateDataService>();
             services.AddScoped<ICandidateService, CandidateService>();
 
@@ -29,12 +41,19 @@ namespace Candidate.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<RequestLoggingMiddleware>();
+            
+            app.UseSwagger();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
+            
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Candidate API V1");
+            });
 
             app.UseRouting();
 

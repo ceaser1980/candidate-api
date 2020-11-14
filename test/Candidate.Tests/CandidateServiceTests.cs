@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Candidate.Domain.Candidates;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -13,12 +14,14 @@ namespace Candidate.Tests
     {
         private ICandidateService _candidateService;
         private ICandidateDataService _candidateDataService;
+        private ILogger<CandidateService> _logger;
 
         [SetUp]
         public void Setup()
         {
             _candidateDataService = Mock.Of<ICandidateDataService>();
-            _candidateService = new CandidateService(_candidateDataService);
+            _logger = Mock.Of<ILogger<CandidateService>>();
+            _candidateService = new CandidateService(_candidateDataService, _logger);
         }
 
         [Test]
@@ -46,11 +49,11 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
 
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);
@@ -85,11 +88,11 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
             
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);
@@ -126,11 +129,11 @@ namespace Candidate.Tests
             };
             
             Mock.Get(_candidateDataService)
-                .Setup(x => x.RetrieveAsync(It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.RetrieveAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(candidates);
             
             //act
-            var result = await _candidateService.RetrieveCandidatesWithSkills(skills, CancellationToken.None);
+            var result = await _candidateService.RetrieveCandidateWithSkills(skills, CancellationToken.None);
 
             //assert
             Assert.IsTrue(result.IsT0);

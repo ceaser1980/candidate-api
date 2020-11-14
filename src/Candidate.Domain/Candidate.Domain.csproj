@@ -9,4 +9,9 @@
       <PackageReference Include="OneOf" Version="2.1.155" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+    
 </Project>

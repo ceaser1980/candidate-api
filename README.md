@@ -55,7 +55,7 @@ In a full project I would have used the Serilog nuget package to set up logging 
 
 As per the document provided I have made the following main assumptions:
 
-* Each candidate has a unique Id and there will never be a situation where the Id is duplicated
+* Each candidate has a unique Id and there will never be a situation where the Id is duplicated. To make this easier I have made the Id a GUID so a normal string value will return a validation error. An example of a correct GUID would be `8b78c336-46a2-49da-a5be-dd882eb53f06`.
 * Id is any string from 1 to 100 characters;
 * Name is any string from 1 to 100 characters;
 * Skills is an array of strings from 1 to 100 characters, being letters, numbers or hyphens ([a-zA-Z0-9-]+), with a maximum of 10,000 elements); elements in the array or in query strings are not duplicated (there is no [ "skill1", "skill2", "skill1" ]).
